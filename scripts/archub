@@ -13,7 +13,7 @@ def main():
         parser.add_argument('command',
             choices=generate_commands()
         )
-        parser.parse_args()
+        parser.parse_args(['-h'])
         return 0
     parser = ArgumentParser(add_help=False)
     parser.add_argument('command', choices=generate_commands())

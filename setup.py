@@ -9,5 +9,8 @@ setup(name='archub',
     ],
     author='Don Grote',
     author_email='dgrote@refirmlabs.com',
-    scripts=['scripts/archub'],
+    scripts=[
+        'scripts/archub',
+        'scripts/ah',
+    ],
     packages=find_packages(exclude=['tests']))
