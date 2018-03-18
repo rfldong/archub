@@ -10,6 +10,8 @@ $ pip install dist/archub-*
 
 ## Usage
 ```
+$ export GITHUB_TOKEN="$YOUR_GITHUB_TOKEN"
+$ export GITHUB_ORGANIZATION="$YOUR_GITHUB_ORGANIZATION"
 $ archub -h todo
 usage: archub todo [-h] [-o ORG] -r REPO [-t TITLE] [-a ASSIGN] description
 
