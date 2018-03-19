@@ -20,11 +20,15 @@ def main(args):
         help='empty string for no organization [default: "{}"]'.format(config.GITHUB_ORGANIZATION))
     parser.add_argument('-r', '--repo', required=True, type=str)
     parser.add_argument('-t', '--title', required=False, type=str, default=NotSet)
-    parser.add_argument('-a', '--assign', required=False, type=str, default=NotSet)
+    parser.add_argument('-a', '--assign', required=False, type=str, default=None,
+        help='To whom this issue will be assigned [default: self]')
     parser.add_argument('description')
     parsed_args = parser.parse_args(args)
     issue_title = parsed_args.description if parsed_args.title is NotSet else parsed_args.title
     issue_description = parsed_args.description if parsed_args.title is not NotSet else NotSet
+    g = Github(config.GITHUB_TOKEN)
+    if parsed_args.assign is None:
+        parsed_args.assign = g.get_user().login
     repo = get_repo(Github(config.GITHUB_TOKEN), parsed_args.org, parsed_args.repo)
     repo.create_issue(
         issue_title,
