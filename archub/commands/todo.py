@@ -2,8 +2,8 @@ import os
 import sys
 from argparse import ArgumentParser
 from archub import cmdline, config
+from archub.core import todo
 from github import Github
-from github.GithubObject import NotSet
 
 def get_repo(github, org, repo_name):
     if len(org) > 0:
@@ -15,25 +15,20 @@ def main(args):
         prog=cmdline.prog(__file__),
         description='Quickly create an issue ticket for the specified repository'
     )
-    parser.add_argument('-o', '--org', required=False, type=str,
-        default=config.GITHUB_ORGANIZATION,
-        help='empty string for no organization [default: "{}"]'.format(config.GITHUB_ORGANIZATION))
+    parser.add_argument('-o', '--org', required=False, type=str, default=None)
     parser.add_argument('-r', '--repo', required=True, type=str)
-    parser.add_argument('-t', '--title', required=False, type=str, default=NotSet)
+    parser.add_argument('-t', '--title', required=False, type=str, default=None)
     parser.add_argument('-a', '--assign', required=False, type=str, default=None,
         help='To whom this issue will be assigned [default: self]')
-    parser.add_argument('description')
+    parser.add_argument('body')
     parsed_args = parser.parse_args(args)
-    issue_title = parsed_args.description if parsed_args.title is NotSet else parsed_args.title
-    issue_description = parsed_args.description if parsed_args.title is not NotSet else NotSet
-    g = Github(config.GITHUB_TOKEN)
-    if parsed_args.assign is None:
-        parsed_args.assign = g.get_user().login
-    repo = get_repo(Github(config.GITHUB_TOKEN), parsed_args.org, parsed_args.repo)
-    repo.create_issue(
-        issue_title,
-        body=issue_description,
-        assignee=parsed_args.assign)
+    todo(
+        parsed_args.org,
+        parsed_args.repo,
+        parsed_args.title,
+        parsed_args.body,
+        parsed_args.assign
+    )
     return 0
 
 if '__main__' == __name__:
