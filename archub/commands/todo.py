@@ -1,7 +1,7 @@
 import os
 import sys
 from argparse import ArgumentParser
-from archub import cmdline
+from archub import cmdline, config
 from archub.types import GithubRepository
 from github.GithubObject import NotSet
 
@@ -10,7 +10,8 @@ def main(args):
         prog=cmdline.prog(__file__),
         description='Quickly create an issue ticket for the specified repository'
     )
-    parser.add_argument('-o', '--org', required=False, type=str)
+    parser.add_argument('-o', '--org', required=False, type=str,
+        default=config.GITHUB_ORGANIZATION, help='[default: "{}"]'.format(config.GITHUB_ORGANIZATION))
     parser.add_argument('-r', '--repo', required=True, type=GithubRepository)
     parser.add_argument('-t', '--title', required=False, type=str, default=NotSet)
     parser.add_argument('-a', '--assign', required=False, type=str, default=NotSet)

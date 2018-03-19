@@ -1,7 +1,7 @@
 import os
 import sys
 from argparse import ArgumentParser
-from archub import cmdline
+from archub import cmdline, config
 from github import Github
 
 def print_issue_line(issue):
@@ -17,7 +17,7 @@ def main(args):
         description='List assigned issues'
     )
     parsed_args = parser.parse_args(args)
-    g = Github(os.environ.get('GITHUB_TOKEN'))
+    g = Github(config.GITHUB_TOKEN)
     for issue in g.get_user().get_issues():
         print_issue_line(issue)
     return 0
