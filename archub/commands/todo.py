@@ -15,8 +15,16 @@ def main(args):
         prog=cmdline.prog(__file__),
         description='Quickly create an issue ticket for the specified repository'
     )
-    parser.add_argument('-o', '--org', required=False, type=str, default=None)
-    parser.add_argument('-r', '--repo', required=True, type=str)
+    parser.add_argument('-o', '--org',
+        required=config.GITHUB_ORGANIZATION is None,
+        type=str,
+        default=config.GITHUB_ORGANIZATION,
+        help='[{}]'.format(config.GITHUB_ORGANIZATION) if config.GITHUB_ORGANIZATION is not None else None)
+    parser.add_argument('-r', '--repo',
+        required=config.GITHUB_REPOSITORY_NAME is None,
+        type=str,
+        default=config.GITHUB_REPOSITORY_NAME,
+        help='[{}]'.format(config.GITHUB_REPOSITORY_NAME) if config.GITHUB_REPOSITORY_NAME is not None else None)
     parser.add_argument('-t', '--title', required=False, type=str, default=None)
     parser.add_argument('-a', '--assign', required=False, type=str, default=None,
         help='To whom this issue will be assigned [default: self]')

@@ -2,10 +2,11 @@
 from setuptools import setup, find_packages
 
 setup(name='archub',
-    version='1.0.0a1',
+    version='1.0.0a2',
     install_requires=[
         'requests',
         'pygithub',
+        'gitpython',
     ],
     author='Don Grote',
     author_email='dgrote@refirmlabs.com',
