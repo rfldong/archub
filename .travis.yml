@@ -7,6 +7,8 @@ jobs:
     script:
     - 'python setup.py bdist_wheel'
     - 'pip install dist/*'
+    - 'export GITHUB_TOKEN=""'
+    - 'export GITHUB_ORGANIZATION=""'
     - 'ah'
     - 'archub'
     - 'ah -h'
