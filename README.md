@@ -4,8 +4,7 @@ This is very much a work in progress. I'll be adding features as I, or my co-wor
 
 ## Installation
 ```
-$ python setup.py bdist_wheel
-$ pip install dist/archub-*
+$ pip install archub
 ```
 
 ## Usage
