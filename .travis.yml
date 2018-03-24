@@ -1,0 +1,13 @@
+language: python
+python:
+- '3.4'
+jobs:
+  include:
+  - stage: test bdist build, install, and run
+    script:
+    - 'python setup.py bdist_wheel'
+    - 'pip install dist/*'
+    - 'ah'
+    - 'archub'
+    - 'ah -h'
+    - 'archub -h'
