@@ -1,4 +1,5 @@
 # archub
+[![Build Status](https://travis-ci.org/rfldong/archub.svg?branch=master)](https://travis-ci.org/rfldong/archub)
 A github cli à la arcanist.
 This is very much a work in progress. I'll be adding features as I, or my co-workers, require them.
 
