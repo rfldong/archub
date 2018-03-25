@@ -3,23 +3,20 @@ import sys
 from argparse import ArgumentParser
 from archub import cmdline, config
 from github import Github
-
-def print_issue_line(issue):
-    print('{} {} {}'.format(
-        '#% 4d' % issue.number,
-        '% 60s' % issue.title[:60],
-        '% 16s' % issue.repository.name
-    ))
+from archub.core import print_issues, print_issues_with_labels
 
 def main(args):
     parser = ArgumentParser(
         prog=cmdline.prog(__file__),
         description='List assigned issues'
     )
+    parser.add_argument('-l', '--labels',
+        help='include labels in output', default=False, action='store_true')
     parsed_args = parser.parse_args(args)
-    g = Github(config.GITHUB_TOKEN)
-    for issue in g.get_user().get_issues():
-        print_issue_line(issue)
+    if parsed_args.labels:
+        print_issues_with_labels()
+    else:
+        print_issues()
     return 0
 
 if '__main__' == __name__:
