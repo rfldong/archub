@@ -1,5 +1,7 @@
+import string
 from github import Github
 from github.GithubObject import NotSet
+from github.GithubException import UnknownObjectException
 from archub import config
 
 def todo(org, repo, title, body, assignee):
@@ -54,3 +56,46 @@ def print_issues_with_labels():
         print_issue_line(issue)
         if len(issue.labels) > 0:
             print_issue_labels(issue)
+
+def issue_title_to_branchname(title):
+    reduced = ''.join([c if c not in string.punctuation else '' for c in title])
+    return ''.join([c if c in string.ascii_letters + string.digits else '-' for c in reduced])
+
+def resolve_issuenum_to_branchname(repo, issuenum):
+    gh = Github(config.GITHUB_TOKEN)
+    return '{}-{}'.format(
+        issuenum,
+        issue_title_to_branchname(
+            gh.get_user().get_repo(repo).get_issue(issuenum).title
+        )
+    )
+
+def branch(issuenum_or_branchname):
+    current_repo = config.find_repo()
+    if current_repo is None:
+        raise RuntimeError('Not inside a git repository')
+    try:
+        issuenum = int(issuenum_or_branchname)
+    except ValueError:
+        issuenum = None
+    if issuenum is not None:
+        try:
+            branchname = resolve_issuenum_to_branchname(config.GITHUB_REPOSITORY_NAME, issuenum)
+        except UnknownObjectException:
+            raise RuntimeError('Unknown issue number {}'.format(issuenum))
+    else:
+        branchname = issuenum_or_branchname
+    if current_repo.active_branch.name == branchname:
+        # do nothing, we're already on the desired branch
+        print('Already on desired branch, doing nothing.')
+        return
+    if current_repo.is_dirty():
+        raise RuntimeError('Current branch is dirty, commit your changes before creating a new branch.')
+    for branch in current_repo.branches:
+        if branch.name == branchname:
+            branch.checkout()
+            print('Checked out already existing branch: {}'.format(branch.name))
+            return
+    new_head = current_repo.create_head(branchname)
+    new_head.checkout()
+    print('Created new branch: {}'.format(branchname))
