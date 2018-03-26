@@ -61,12 +61,12 @@ def issue_title_to_branchname(title):
     reduced = ''.join([c if c not in string.punctuation else '' for c in title])
     return ''.join([c if c in string.ascii_letters + string.digits else '-' for c in reduced])
 
-def resolve_issuenum_to_branchname(repo, issuenum):
+def resolve_issuenum_to_branchname(org, repo, issuenum):
     gh = Github(config.GITHUB_TOKEN)
     return '{}-{}'.format(
         issuenum,
         issue_title_to_branchname(
-            gh.get_user().get_repo(repo).get_issue(issuenum).title
+            gh.get_repo('{}/{}'.format(org,repo)).get_issue(issuenum).title
         )
     )
 
@@ -80,7 +80,10 @@ def branch(issuenum_or_branchname):
         issuenum = None
     if issuenum is not None:
         try:
-            branchname = resolve_issuenum_to_branchname(config.GITHUB_REPOSITORY_NAME, issuenum)
+            branchname = resolve_issuenum_to_branchname(
+                config.GITHUB_ORGANIZATION,
+                config.GITHUB_REPOSITORY_NAME,
+                issuenum)
         except UnknownObjectException:
             raise RuntimeError('Unknown issue number {}'.format(issuenum))
     else:
