@@ -44,15 +44,26 @@ def print_issue_labels(issue, linewidth=80):
     pad = '      '
     print(pad + render_issue_labels(issue, linewidth - len(pad)))
 
-def get_issues():
-    return Github(config.GITHUB_TOKEN).get_user().get_issues()
+def get_issues(get_all_issues):
+    gh = Github(config.GITHUB_TOKEN)
+    user = gh.get_user()
+    issues = user.get_issues()
+    if get_all_issues:
+        return issues
+    else:
+        # yes, this seems obtuse, but directly querying the
+        # requested repository for assigned issues is SLOW
+        return filter(
+            lambda x: x.repository.name == config.GITHUB_REPOSITORY_NAME,
+            issues)
 
-def print_issues():
-    for issue in get_issues():
+def print_issues(show_all=True):
+    print('show_all', show_all)
+    for issue in get_issues(show_all):
         print_issue_line(issue)
 
-def print_issues_with_labels():
-    for issue in get_issues():
+def print_issues_with_labels(show_all=True):
+    for issue in get_issues(show_all):
         print_issue_line(issue)
         if len(issue.labels) > 0:
             print_issue_labels(issue)
