@@ -117,8 +117,9 @@ def branch(issuenum_or_branchname):
 
 def pullrequest(title, body='', base='master', maintainer_can_modify=True):
     repo = config.repo
+    assert repo.is_dirty() is False, 'Your branch is dirty; commit your changes and try again.'
     remote = repo.remote()
-    assert remote.exists(), 'Repository remote doesn\'t exist; aborting'
+    assert remote.exists(), 'Repository remote doesn\'t exist; aborting.'
     # push the current branch to origin as a remote branch (if it doesn't already exist)
     ret = remote.push('refs/heads/{0}:refs/heads/{0}'.format(repo.active_branch.name))
     repo.active_branch.set_tracking_branch(
@@ -142,6 +143,14 @@ def pullrequest(title, body='', base='master', maintainer_can_modify=True):
             repo.active_branch.name,
             maintainer_can_modify=maintainer_can_modify)
     else:
+        try:
+            pr = github_repo.get_pull(config.GITHUB_ISSUE_NUMBER)
+            if 'closed' == pr.state:
+                pr.edit(state='open')
+                return
+        except Exception:
+            # pull request already exists, do nothing
+            return
         github_repo.create_pull(
             issue,
             base,
