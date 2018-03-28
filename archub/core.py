@@ -131,7 +131,7 @@ def pullrequest(title, body='', base='master', maintainer_can_modify=True):
     github_repo = gh.get_repo('{}/{}'.format(config.GITHUB_ORGANIZATION, config.GITHUB_REPOSITORY_NAME))
     # look up the issue if our branch name is prefixed with r/\d+-/
     if config.GITHUB_ISSUE_NUMBER is not None:
-        issue = github_repo.get_issue(issuenum)
+        issue = github_repo.get_issue(config.GITHUB_ISSUE_NUMBER)
     else:
         issue = None
     if issue is None:
