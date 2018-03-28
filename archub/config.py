@@ -1,4 +1,5 @@
 import os
+import re
 from git import Repo
 
 def assert_get_environ(envname):
@@ -38,3 +39,15 @@ def org_and_reponame_from_repo(r):
     return None, None
 
 GITHUB_ORGANIZATION, GITHUB_REPOSITORY_NAME = org_and_reponame_from_repo(repo)
+
+def issue_number_from_repo(r):
+    if r is None:
+        return None
+    regex = re.compile('^(\d+)-')
+    match = regex.match(r.active_branch.name)
+    if match is not None:
+        issuenum = int(match.groups()[0])
+        return issuenum
+    return None
+
+GITHUB_ISSUE_NUMBER = issue_number_from_repo(repo)
