@@ -58,7 +58,6 @@ def get_issues(get_all_issues):
             issues)
 
 def print_issues(show_all=True):
-    print('show_all', show_all)
     for issue in get_issues(show_all):
         print_issue_line(issue)
 
