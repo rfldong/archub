@@ -1,4 +1,3 @@
-import re
 import string
 from github import Github
 from github.GithubObject import NotSet
@@ -115,28 +114,19 @@ def branch(issuenum_or_branchname):
     print('Created new branch: {}'.format(branchname))
 
 
-def pullrequest(title, body, base='master', maintainer_can_modify=True):
+def pullrequest(title, body='', base='master', maintainer_can_modify=True):
     repo = config.repo
     remote = repo.remote()
     assert remote.exists(), 'Repository remote doesn\'t exist; aborting'
     # push the current branch to origin as a remote branch (if it doesn't already exist)
     ret = remote.push('refs/heads/{0}:refs/heads/{0}'.format(repo.active_branch.name))
-    # look up the issue if our branch name is prefixed with r/\d+-/
-    regex = re.compile('^(\d+)-')
-    print(regex)
-    match = regex.match(repo.active_branch.name)
-    print(match)
     gh = Github(config.GITHUB_TOKEN)
     github_repo = gh.get_repo('{}/{}'.format(config.GITHUB_ORGANIZATION, config.GITHUB_REPOSITORY_NAME))
-    print(github_repo)
-    if match is not None:
-        issuenum = int(match.groups()[0])
-        print(issuenum)
+    # look up the issue if our branch name is prefixed with r/\d+-/
+    if config.GITHUB_ISSUE_NUMBER is not None:
         issue = github_repo.get_issue(issuenum)
-        print(issue)
     else:
         issue = None
-    print(issue)
     if issue is None:
         github_repo.create_pull(
             title,
