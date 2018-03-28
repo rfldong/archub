@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 setup(name='archub',
-    version='1.0.0a5',
+    version='1.0.0a6',
     install_requires=[
         'requests',
         'pygithub',
