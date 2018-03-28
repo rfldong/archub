@@ -147,7 +147,7 @@ def pullrequest(title, body='', base='master', maintainer_can_modify=True):
             pr = github_repo.get_pull(config.GITHUB_ISSUE_NUMBER)
             if 'closed' == pr.state:
                 pr.edit(state='open')
-                return
+            return
         except Exception:
             # pull request already exists, do nothing
             return
