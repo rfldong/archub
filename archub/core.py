@@ -1,3 +1,4 @@
+from git import RemoteReference
 import string
 from github import Github
 from github.GithubObject import NotSet
@@ -120,6 +121,12 @@ def pullrequest(title, body='', base='master', maintainer_can_modify=True):
     assert remote.exists(), 'Repository remote doesn\'t exist; aborting'
     # push the current branch to origin as a remote branch (if it doesn't already exist)
     ret = remote.push('refs/heads/{0}:refs/heads/{0}'.format(repo.active_branch.name))
+    repo.active_branch.set_tracking_branch(
+        RemoteReference(
+            repo,
+            'refs/remotes/origin/{}'.format(repo.active_branch.name)
+        )
+    )
     gh = Github(config.GITHUB_TOKEN)
     github_repo = gh.get_repo('{}/{}'.format(config.GITHUB_ORGANIZATION, config.GITHUB_REPOSITORY_NAME))
     # look up the issue if our branch name is prefixed with r/\d+-/
