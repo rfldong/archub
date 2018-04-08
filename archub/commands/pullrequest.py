@@ -12,8 +12,7 @@ def main(args):
         description='Create a pull request for the current branch [{}]'\
           .format(config.repo.active_branch.name)
     )
-    parser.add_argument('-t', '--title', default='', required=True,
-        help='Pull Request title')
+    parser.add_argument('title', help='Pull Request title')
     parsed_args = parser.parse_args(args)
     try:
         pullrequest(parsed_args.title)
