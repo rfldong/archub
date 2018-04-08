@@ -58,15 +58,15 @@ def get_issues(get_all_issues):
             lambda x: x.repository.name == config.GITHUB_REPOSITORY_NAME,
             issues)
 
-def print_issues(show_all=True):
+def print_issues(show_all=True, linewidth=80):
     for issue in get_issues(show_all):
-        print_issue_line(issue)
+        print_issue_line(issue, linewidth=linewidth)
 
-def print_issues_with_labels(show_all=True):
+def print_issues_with_labels(show_all=True, linewidth=80):
     for issue in get_issues(show_all):
-        print_issue_line(issue)
+        print_issue_line(issue, linewidth=linewidth)
         if len(issue.labels) > 0:
-            print_issue_labels(issue)
+            print_issue_labels(issue, linewidth=linewidth)
 
 def issue_title_to_branchname(title):
     reduced = ''.join([c if c not in string.punctuation else '' for c in title])

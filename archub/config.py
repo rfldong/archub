@@ -51,3 +51,12 @@ def issue_number_from_repo(r):
     return None
 
 GITHUB_ISSUE_NUMBER = issue_number_from_repo(repo)
+
+try:
+    from termios import TIOCGWINSZ
+    from fcntl import ioctl
+    from struct import unpack
+    from sys import stdout
+    TTY_ROWS, TTY_COLS = unpack('HH', ioctl(stdout.fileno(), TIOCGWINSZ, '    '))
+except Exception as e:
+    TTY_ROWS, TTY_COLS = 25, 80
