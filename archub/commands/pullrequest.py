@@ -12,8 +12,8 @@ def main(args):
         description='Create a pull request for the current branch [{}]'\
           .format(config.repo.active_branch.name)
     )
-    parser.add_argument('-t', '--title', default='', required=config.GITHUB_ISSUE_NUMBER is None,
-        help='Pull Request title; only required if no issue exists')
+    parser.add_argument('-t', '--title', default='', required=True,
+        help='Pull Request title')
     parsed_args = parser.parse_args(args)
     try:
         pullrequest(parsed_args.title)
