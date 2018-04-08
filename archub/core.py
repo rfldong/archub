@@ -115,6 +115,23 @@ def branch(issuenum_or_branchname):
     print('Created new branch: {}'.format(branchname))
 
 
+def push():
+    repo = config.repo
+    assert repo.is_dirty() is False, 'Your branch is dirty; commit your changes and try again.'
+    remote = repo.remote()
+    assert remote.exists(), 'Repository remote [{}] doesn\'t exist; aborting.'.format(remote.name)
+    # push the current branch to origin as a remote branch
+    ret = remote.push('refs/heads/{0}:refs/heads/{0}'.format(repo.active_branch.name))
+    if repo.active_branch.tracking_branch() is None:
+        # we aren't tracking our remote branch, let's do that
+        repo.active_branch.set_tracking_branch(
+            RemoteReference(
+                repo,
+                'refs/remotes/origin/{}'.format(repo.active_branch.name)
+            )
+        )
+
+
 def pullrequest(title, body='', base='master', maintainer_can_modify=True):
     repo = config.repo
     assert repo.is_dirty() is False, 'Your branch is dirty; commit your changes and try again.'
