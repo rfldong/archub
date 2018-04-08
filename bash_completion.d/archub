@@ -1,0 +1,55 @@
+_archub()
+{
+  local cur prev opts
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+  command="${COMP_WORDS[1]}"
+  opts="-h --help todo tasks branch pullrequest push members"
+
+  case "${command}" in
+    todo)
+      case "${prev}" in
+        -t|--title)
+          return 0
+          ;;
+        -o|--org)
+          return 0
+          ;;
+        -a|--assign)
+          local members=$(archub members)
+          COMPREPLY=( $(compgen -W "${members}" -- ${cur}) )
+          return 0
+          ;;
+      esac
+      local todo="-h --help -o --org -r --repo -t --title -a --assign"
+      COMPREPLY=( $(compgen -W "${todo}" -- ${cur}) )
+      return 0
+      ;;
+    tasks)
+      local tasks="-h --help -l --labels -a --all"
+      COMPREPLY=( $(compgen -W "${tasks}" -- ${cur}) )
+      return 0
+      ;;
+    branch)
+      local branch="-h --help $(ah issues)"
+      COMPREPLY=( $(compgen -W "${branch}" -- ${cur}) )
+      return 0
+      ;;
+    pullrequest)
+      return 0
+      ;;
+    push)
+      return 0
+      ;;
+    -h|--help)
+      return 0
+      ;;
+    *)
+    ;;
+  esac
+  COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+  return 0
+}
+complete -F _archub archub
+complete -F _archub ah

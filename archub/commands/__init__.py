@@ -3,6 +3,8 @@ from .task import main as tasks
 from .branch import main as branch
 from .pullrequest import main as pullrequest
 from .push import main as push
+from .members import main as members
+from .issues import main as issues
 
 __all__ = [
     'todo',
@@ -10,4 +12,6 @@ __all__ = [
     'branch',
     'pullrequest',
     'push',
+    'members',
+    'issues',
 ]
