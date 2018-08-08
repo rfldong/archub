@@ -5,7 +5,7 @@ _archub()
   cur="${COMP_WORDS[COMP_CWORD]}"
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   command="${COMP_WORDS[1]}"
-  opts="-h --help todo tasks branch pullrequest push members"
+  opts="-h --help todo tasks branch pullrequest push members choo"
 
   case "${command}" in
     todo)
@@ -40,6 +40,9 @@ _archub()
       return 0
       ;;
     push)
+      return 0
+      ;;
+    choo)
       return 0
       ;;
     -h|--help)

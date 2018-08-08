@@ -5,6 +5,7 @@ from .pullrequest import main as pullrequest
 from .push import main as push
 from .members import main as members
 from .issues import main as issues
+from .choo import main as choo
 
 __all__ = [
     'todo',
@@ -14,4 +15,5 @@ __all__ = [
     'push',
     'members',
     'issues',
+    'choo',
 ]
